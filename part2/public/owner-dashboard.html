@@ -8,7 +8,28 @@
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body class="bg-light">
-  <button class="btn btn-danger float-end" @click="logout">Logout</button>
+  <!-- logout button -->
+  <div class="d-flex justify-content-end p-3">
+    <button type="button" id="logoutBtn" class="btn btn-danger">Logout</button>
+    <script>
+      document.getElementById('logoutBtn').addEventListener('click', async () => {
+        try {
+          const res = await fetch('/api/users/logout', {
+            method: 'POST',
+            credentials: 'include'
+          });
+          if (res.ok) {
+            window.location.href = 'index.html'; // redirect to login page
+          } else {
+            alert('Logout failed');
+          }
+        } catch (err) {
+          console.error('Error logging out:', err);
+        }
+      });
+    </script>
+  </div>
+
   <div id="app" class="container py-4">
     <h1 class="mb-4 text-primary">Owner Dashboard</h1>
 
@@ -124,7 +145,7 @@
           }
         });
 
-        return { form, walks, message, error, submitWalkRequest, logout };
+        return { form, walks, message, error, submitWalkRequest};
       }
     }).mount('#app');
   </script>
