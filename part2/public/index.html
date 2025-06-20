@@ -48,7 +48,7 @@
               this.error = result.error || 'Login failed';
               return;
             }
-            localStorage.setItem('user', JSON.stringify(result.user));
+            // removed localStorage
             window.location.href = result.user.role === 'owner' ? 'owner-dashboard.html' : 'walker-dashboard.html';
           } catch (err) {
             this.error = 'Login error';
