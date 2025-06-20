@@ -22,6 +22,7 @@ router.get('/', async (req, res) => {
 // POST a new walk request (from owner)
 router.post('/', async (req, res) => {
   const { dog_id, requested_time, duration_minutes, location } = req.body;
+  const owner_id = req.session.user?.user_id;
 
   // Log what the frontend is sending
   console.log('Received walk request body:', req.body);
