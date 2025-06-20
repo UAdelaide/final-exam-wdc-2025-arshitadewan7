@@ -72,5 +72,25 @@ router.post('/logout', (req, res) => {
   });
 });
 
+// GET /api/users/mydogs - return dogs owned by the logged-in user
+router.get('/mydogs', async (req, res) => {
+  if (!req.session.user || req.session.user.role !== 'owner') {
+    return res.status(401).json({ error: 'Not authorized' });
+  }
+
+  try {
+    const [dogs] = await db.query(`
+      SELECT dog_id, name, size
+      FROM Dogs
+      WHERE owner_id = ?
+    `, [req.session.user.user_id]);
+
+    res.json(dogs);
+  } catch (error) {
+    console.error('Failed to fetch dogs:', error);
+    res.status(500).json({ error: 'Error retrieving dogs' });
+  }
+});
+
 
 module.exports = router;
