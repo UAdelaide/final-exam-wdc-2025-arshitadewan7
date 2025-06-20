@@ -34,13 +34,27 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    const [result] = await db.query(`
-      INSERT INTO WalkRequests (dog_id, requested_time, duration_minutes, location)
-      VALUES (?, ?, ?, ?)
-    `, [dog_id, requested_time, duration_minutes, location]);
+    // Check if the dog belongs to the logged-in user
+    const [rows] = await db.query(
+      'SELECT * FROM Dogs WHERE dog_id = ? AND owner_id = ?',
+      [dog_id, owner_id]
+    );
+
+    if (rows.length === 0) {
+      return res.status(403).json({ error: 'You are not allowed to create a request for this dog' });
+    }
+
+    // Proceed to insert the walk request
+    const [result] = await db.query(
+      `INSERT INTO WalkRequests (dog_id, requested_time, duration_minutes, location)
+       VALUES (?, ?, ?, ?)`,
+      [dog_id, requested_time, duration_minutes, location]
+    );
 
     res.status(201).json({ message: 'Walk request created', request_id: result.insertId });
+
   } catch (error) {
+    console.error('Error creating walk request:', error);
     res.status(500).json({ error: 'Failed to create walk request' });
   }
 });
