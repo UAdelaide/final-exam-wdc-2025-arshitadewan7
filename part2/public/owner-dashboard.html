@@ -94,7 +94,7 @@
             const result = await res.json();
 
             if (!res.ok) throw new Error(result.error || 'Error submitting');
-
+            
             message.value = result.message;
             form.value = { dog_id: '', requested_time: '', duration_minutes: '', location: '' };
             loadWalks();
