@@ -73,7 +73,7 @@
         const walks = ref([]);
         const message = ref('');
         const error = ref('');
-        const user = JSON.parse(localStorage.getItem('user'));
+        const user = ref(null);
 
         async function loadWalks() {
           try {
@@ -92,25 +92,34 @@
               body: JSON.stringify(form.value)
             });
             const result = await res.json();
+
             if (!res.ok) throw new Error(result.error || 'Error submitting');
 
-            // updated this section to clear error and show success message
             message.value = result.message;
-            form.value = { dog_id: '', requested_time: '', duration_minutes: '', location: '' }; // reset form fields after successful submission
-
-            // refresh the list
+            form.value = { dog_id: '', requested_time: '', duration_minutes: '', location: '' };
             loadWalks();
           } catch (err) {
             error.value = err.message;
           }
         }
 
-        onMounted(() => { // added role checks
-          if (!user || user.role !== 'owner') {
-            alert('Not logged in as owner');
-            window.location.href = 'index.html';
-          } else {
+        onMounted(async () => {
+          try {
+            const res = await fetch('/api/users/me');
+            if (!res.ok) throw new Error('Not logged in');
+            const currentUser = await res.json();
+
+            if (currentUser.role !== 'owner') {
+              alert('Not logged in as owner');
+              window.location.href = 'index.html';
+              return;
+            }
+
+            user.value = currentUser;
             loadWalks();
+          } catch (err) {
+            alert('Session expired or not logged in');
+            window.location.href = 'index.html';
           }
         });
 
