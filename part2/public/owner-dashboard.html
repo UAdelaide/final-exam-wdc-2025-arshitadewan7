@@ -109,8 +109,8 @@
             const res = await fetch('/api/users/me'); // fetch user from server-side session
             if (!res.ok) throw new Error('Not logged in');
             const currentUser = await res.json();
-            
 
+            // check role
             if (currentUser.role !== 'owner') {
               alert('Not logged in as owner');
               window.location.href = 'index.html';
