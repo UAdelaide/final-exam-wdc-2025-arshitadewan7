@@ -17,10 +17,10 @@ app.use('/api/walks', walkRoutes);
 app.use('/api/users', userRoutes);
 
 app.use(session({
-  secret: 'your-secret-key',  // 🔒 use a strong secret in production
+  secret: 'mykey',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false }  // Set to true if using HTTPS
+  cookie: { secure: false }
 }));
 
 // Export the app instead of listening here
