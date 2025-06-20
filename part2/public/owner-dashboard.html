@@ -96,7 +96,7 @@
 
             // updated this section to clear error and show success message
             message.value = result.message;
-            form.value = { dog_id: '', requested_time: '', duration_minutes: '', location: '' }; 
+            form.value = { dog_id: '', requested_time: '', duration_minutes: '', location: '' };
 
             // refresh the list
             loadWalks();
@@ -224,7 +224,7 @@
             if (!res.ok) throw new Error(result.error || 'Error submitting');
 
             message.value = result.message;
-            form.value = { dog_id: '', requested_time: '', duration_minutes: '', location: '' };
+            form.value = { dog_id: '', requested_time: '', duration_minutes: '', location: '' }; // reset form fields after successful submission
             loadWalks();
           } catch (err) {
             error.value = err.message;
