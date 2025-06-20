@@ -1,32 +1,23 @@
-// Routes are split into separate files (routes/dogs.js etc.) for modularity.
-// All routes are registered in app.js using app.use().
-
 const express = require('express');
-const path = require('path');
 const mysql = require('mysql2/promise');
 
 const app = express();
+const PORT = 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
-const dogsRoute = require('./routes/dogs');
-const walkrequestsRoute = require('./routes/walkrequests');
-const walkersRoute = require('./routes/walkers');
-
-app.use('/api/dogs', dogsRoute);
-app.use('/api/walkrequests/open', walkrequestsRoute);
-app.use('/api/walkers/summary', walkersRoute);
 
 let db;
 
 (async () => {
   try {
+
     const connection = await mysql.createConnection({
       host: '127.0.0.1',
       user: 'root',
       password: ''
     });
+
 
     await connection.query('CREATE DATABASE IF NOT EXISTS DogWalkService');
     await connection.end();
@@ -39,6 +30,7 @@ let db;
       database: 'DogWalkService'
     });
 
+  
     await db.execute(`
       CREATE TABLE IF NOT EXISTS Users (
         user_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -73,6 +65,36 @@ let db;
       )
     `);
 
+    await db.execute(`
+      CREATE TABLE IF NOT EXISTS WalkApplications (
+        application_id INT AUTO_INCREMENT PRIMARY KEY,
+        request_id INT NOT NULL,
+        walker_id INT NOT NULL,
+        applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        status ENUM('pending', 'accepted', 'rejected') DEFAULT 'pending',
+        FOREIGN KEY (request_id) REFERENCES WalkRequests(request_id),
+        FOREIGN KEY (walker_id) REFERENCES Users(user_id),
+        UNIQUE (request_id, walker_id)
+      )
+    `);
+
+    await db.execute(`
+      CREATE TABLE IF NOT EXISTS WalkRatings (
+        rating_id INT AUTO_INCREMENT PRIMARY KEY,
+        request_id INT NOT NULL,
+        walker_id INT NOT NULL,
+        owner_id INT NOT NULL,
+        rating INT CHECK (rating BETWEEN 1 AND 5),
+        comments TEXT,
+        rated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (request_id) REFERENCES WalkRequests(request_id),
+        FOREIGN KEY (walker_id) REFERENCES Users(user_id),
+        FOREIGN KEY (owner_id) REFERENCES Users(user_id),
+        UNIQUE (request_id)
+      )
+    `);
+
+    // Step 5: Insert test data if Users is empty
     const [users] = await db.execute('SELECT COUNT(*) AS count FROM Users');
     if (users[0].count === 0) {
       await db.execute(`
@@ -98,22 +120,67 @@ let db;
       `);
     }
 
-    app.set('db', db);
+    // 🐶 Route: /api/dogs
+    app.get('/api/dogs', async (req, res) => {
+      try {
+        const [rows] = await db.query(`
+          SELECT d.name AS dog_name, d.size, u.username AS owner_username
+          FROM Dogs d
+          JOIN Users u ON d.owner_id = u.user_id;
+        `);
+        res.json(rows);
+      } catch (err) {
+        res.status(500).json({ error: 'Failed to retrieve dogs' });
+      }
+    });
+
+    // 🐾 Route: /api/walkrequests/open
+    app.get('/api/walkrequests/open', async (req, res) => {
+      try {
+        const [rows] = await db.query(`
+          SELECT wr.request_id, d.name AS dog_name, wr.requested_time, wr.duration_minutes, wr.location, u.username AS owner_username
+          FROM WalkRequests wr
+          JOIN Dogs d ON wr.dog_id = d.dog_id
+          JOIN Users u ON d.owner_id = u.user_id
+          WHERE wr.status = 'open';
+        `);
+        res.json(rows);
+      } catch (err) {
+        res.status(500).json({ error: 'Failed to retrieve walk requests' });
+      }
+    });
+
+    // 👟 Route: /api/walkers/summary
+    app.get('/api/walkers/summary', async (req, res) => {
+      try {
+        const [rows] = await db.query(`
+          SELECT
+            u.username AS walker_username,
+            COUNT(r.rating_id) AS total_ratings,
+            ROUND(AVG(r.rating), 1) AS average_rating,
+            IFNULL((
+              SELECT COUNT(*)
+              FROM WalkRequests wr
+              JOIN WalkApplications wa ON wa.request_id = wr.request_id
+              WHERE wa.walker_id = u.user_id AND wr.status = 'completed' AND wa.status = 'accepted'
+            ), 0) AS completed_walks
+          FROM Users u
+          LEFT JOIN WalkApplications wa ON wa.walker_id = u.user_id
+          LEFT JOIN WalkRatings r ON r.walker_id = u.user_id
+          WHERE u.role = 'walker'
+          GROUP BY u.user_id;
+        `);
+        res.json(rows);
+      } catch (err) {
+        res.status(500).json({ error: 'Failed to retrieve walker summary' });
+      }
+    });
+
+    // ✅ Start the server once DB is ready
+    app.listen(PORT, () => {
+      console.log(`Server running at http://localhost:${PORT}`);
+    });
   } catch (err) {
     console.error('Error setting up database:', err);
   }
 })();
-
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.get('/', (req, res) => {
-  res.send('🐾 DogWalkService API is running! Try /api/dogs');
-});
-
-
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
-});
-
-module.exports = app;
