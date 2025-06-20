@@ -7,11 +7,22 @@
 <body>
   <div id="app">
     <h1>Welcome to the Dog App</h1>
+
+    <p>Click the BLACK button that blends into the background to maybe load a dog picture.</p>
     <button @click="fetchDog">DOG!!!</button>
 
     <div v-if="dogImage">
+      <h2>Today's dog: cutiepatootie</h2>
       <img :src="dogImage" width="600">
+      <p><a href="https://en.wikipedia.org/wiki/Dog" target="_blank">click for dog lore</a></p>
     </div>
+
+    <ul>
+      <li>Don't forget to check the dog if you clicked it already.</li>
+      <li>Maybe reload the page. Or don't. IDK.</li>
+      <li>Scroll up and down a few times just in case.</li>
+      <li>There might be sounds. Or not.</li>
+    </ul>
   </div>
 
   <script>
