@@ -8,6 +8,7 @@
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body class="bg-light">
+  <button class="btn btn-danger float-end" @click="logout">Logout</button>
   <div id="app" class="container py-4">
     <h1 class="mb-4 text-success">Walker Dashboard</h1>
 
@@ -73,6 +74,17 @@
             message.value = '';
           }
         }
+
+        async function logout() {
+  try {
+    const res = await fetch('/api/users/logout', { method: 'POST' });
+    if (!res.ok) throw new Error('Logout failed');
+    window.location.href = 'index.html';
+  } catch (err) {
+    alert('Logout failed');
+  }
+}
+
 
         onMounted(async () => { // modified onMounted to serve session logic and handle logged in users
           try {
