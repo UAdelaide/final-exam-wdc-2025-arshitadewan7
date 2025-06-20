@@ -76,6 +76,17 @@
           }
         }
 
+        async function getCurrentUser() {
+        try {
+          const res = await fetch('/api/users/me');
+          if (!res.ok) throw new Error('Not logged in');
+          return await res.json(); // { user_id, username, role }
+        } catch (err) {
+          throw new Error('Session expired. Redirecting to login...');
+        }
+      }
+
+
         async function applyToWalk(requestId) {
           try {
             const res = await fetch(`/api/walks/${requestId}/apply`, {
