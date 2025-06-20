@@ -70,7 +70,6 @@ let db;
       )
     `);
 
-   
     const [users] = await db.execute('SELECT COUNT(*) AS count FROM Users');
     if (users[0].count === 0) {
       await db.execute(`
@@ -96,14 +95,12 @@ let db;
       `);
     }
 
-    // Make db globally accessible to routes
     app.set('db', db);
   } catch (err) {
     console.error('Error setting up database:', err);
   }
 })();
 
-// Optional: static/public fallback
 app.use(express.static(path.join(__dirname, 'public')));
 
 module.exports = app;
