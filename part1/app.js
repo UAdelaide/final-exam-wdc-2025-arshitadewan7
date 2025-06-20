@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mysql = require('mysql2/promise');
 
@@ -9,7 +8,6 @@ const app = express();
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 
 const dogsRoute = require('./routes/dogs');
 const walkrequestsRoute = require('./routes/walkrequests');
