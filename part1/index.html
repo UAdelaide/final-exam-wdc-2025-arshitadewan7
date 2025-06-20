@@ -7,5 +7,15 @@
   <div id="app">
     <h1>Welcome to the Dog App</h1>
   </div>
+  <script src="https://unpkg.com/vue@3"></script>
+<script>
+  const { createApp } = Vue;
+  createApp({
+    data() {
+      return { dogImage: '' };
+    }
+  }).mount('#app');
+</script>
+
 </body>
 </html>
