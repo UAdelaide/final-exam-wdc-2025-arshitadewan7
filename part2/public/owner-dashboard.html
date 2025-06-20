@@ -136,24 +136,32 @@
         }
 
         onMounted(async () => {
-          try {
-            const res = await fetch('/api/users/me'); // added session based fetch
-            if (!res.ok) throw new Error('Not logged in');
-            const currentUser = await res.json();
+        try {
+          const res = await fetch('/api/users/me');
+          if (!res.ok) throw new Error('Not logged in');
+          const currentUser = await res.json();
 
-            if (currentUser.role !== 'owner') {  // check if the user has the correct role for the respective dashboards
-              alert('Not logged in as owner');
-              window.location.href = 'index.html';
-              return;
-            }
-
-            user.value = currentUser;
-            loadWalks();
-          } catch (err) {
-            alert('Session expired or not logged in');
+          if (currentUser.role !== 'owner') {
+            alert('Not logged in as owner');
             window.location.href = 'index.html';
+            return;
           }
-        });
+
+          user.value = currentUser;
+
+          // Fetch dogs for this owner
+          const dogRes = await fetch('/api/users/mydogs');
+          if (dogRes.ok) {
+            dogs.value = await dogRes.json();
+          }
+
+          loadWalks();
+        } catch (err) {
+          alert('Session expired or not logged in');
+          window.location.href = 'index.html';
+        }
+      });
+
 
         return { form, walks, message, error, submitWalkRequest};
       }
