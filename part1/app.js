@@ -1,3 +1,6 @@
+// Routes are split into separate files (routes/dogs.js etc.) for modularity.
+// All routes are registered in app.js using app.use().
+
 const express = require('express');
 const path = require('path');
 const mysql = require('mysql2/promise');
