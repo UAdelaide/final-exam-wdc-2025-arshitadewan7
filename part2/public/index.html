@@ -8,11 +8,11 @@
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body class="bg-light">
-  <div id="app" class="container py-5" style="max-width: 500px;">
+  <div id="app" class="container py-5" style="max-width: 700px;">
     <h1 class="mb-4 text-primary">Welcome to the Dog Walking Service!</h1>
     <p class="lead">Connect with trusted walkers for your beloved dog!</p>
 
-     <!--added login form-->
+    <!-- Login form -->
     <div class="mb-3">
       <label class="form-label">Email</label>
       <input type="email" class="form-control" v-model="email" required>
@@ -24,6 +24,29 @@
     <button class="btn btn-primary" @click="login">Log In</button>
 
     <div v-if="error" class="alert alert-danger mt-3">{{ error }}</div>
+
+    <!-- Registered Dogs Section -->
+    <h2 class="mt-5">All Registered Dogs</h2>
+    <table v-if="dogs.length" class="table table-bordered table-striped mt-3">
+      <thead>
+        <tr>
+          <th>Dog ID</th>
+          <th>Name</th>
+          <th>Size</th>
+          <th>Owner ID</th>
+          <th>Photo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="dog in dogs" :key="dog.dog_id">
+          <td>{{ dog.dog_id }}</td>
+          <td>{{ dog.name }}</td>
+          <td>{{ dog.size }}</td>
+          <td>{{ dog.owner_id }}</td>
+          <td><img :src="dog.photo" alt="dog photo" width="100"></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
   <script>
@@ -33,7 +56,8 @@
         return {
           email: '',
           password: '',
-          error: ''
+          error: '',
+          dogs: []
         };
       },
       methods: {
@@ -49,12 +73,38 @@
               this.error = result.error || 'Login failed';
               return;
             }
-            // removed localStorage
+            // Redirect based on role
             window.location.href = result.user.role === 'owner' ? 'owner-dashboard.html' : 'walker-dashboard.html';
           } catch (err) {
             this.error = 'Login error';
           }
+        },
+        async fetchDogs() {
+          try {
+            const res = await fetch('/api/dogs');
+            const dogList = await res.json();
+
+            // For each dog, fetch a random image from dog.ceo
+            const dogsWithPhotos = await Promise.all(
+              dogList.map(async (dog) => {
+                try {
+                  const imgRes = await fetch('https://dog.ceo/api/breeds/image/random');
+                  const imgData = await imgRes.json();
+                  return { ...dog, photo: imgData.message };
+                } catch {
+                  return { ...dog, photo: 'https://via.placeholder.com/100x100?text=No+Image' };
+                }
+              })
+            );
+
+            this.dogs = dogsWithPhotos;
+          } catch (err) {
+            console.error('Failed to load dogs:', err);
+          }
         }
+      },
+      mounted() {
+        this.fetchDogs();
       }
     }).mount('#app');
   </script>
