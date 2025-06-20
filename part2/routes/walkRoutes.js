@@ -22,42 +22,44 @@ router.get('/', async (req, res) => {
 // POST a new walk request (from owner)
 router.post('/', async (req, res) => {
   const { dog_id, requested_time, duration_minutes, location } = req.body;
-  const owner_id = req.session.user?.user_id;
+  const user = req.session.user;
 
-  // Log what the frontend is sending
-  console.log('Received walk request body:', req.body);
+  if (!user || user.role !== 'owner') {
+    return res.status(403).json({ error: 'Only logged-in owners can create walk requests.' });
+  }
 
-  // Validation: Are all required fields provided?
   if (!dog_id || !requested_time || !duration_minutes || !location) {
-    console.log('Missing one or more required fields');
-    return res.status(400).json({ error: 'Missing required fields' });
+    return res.status(400).json({ error: 'Missing required fields.' });
   }
 
   try {
-    // Check if the dog belongs to the logged-in user
-    const [rows] = await db.query(
-      'SELECT * FROM Dogs WHERE dog_id = ? AND owner_id = ?',
-      [dog_id, owner_id]
+    // Check that the dog belongs to the logged-in user
+    const [dogs] = await db.query(
+      `SELECT * FROM Dogs WHERE dog_id = ? AND owner_id = ?`,
+      [dog_id, user.user_id]
     );
 
-    if (rows.length === 0) {
-      return res.status(403).json({ error: 'You are not allowed to create a request for this dog' });
+    if (dogs.length === 0) {
+      return res.status(403).json({ error: 'You do not own this dog.' });
     }
 
-    // Proceed to insert the walk request
+    // Insert the walk request
     const [result] = await db.query(
       `INSERT INTO WalkRequests (dog_id, requested_time, duration_minutes, location)
        VALUES (?, ?, ?, ?)`,
       [dog_id, requested_time, duration_minutes, location]
     );
 
-    res.status(201).json({ message: 'Walk request created', request_id: result.insertId });
-
-  } catch (error) {
-    console.error('Error creating walk request:', error);
-    res.status(500).json({ error: 'Failed to create walk request' });
+    res.status(201).json({
+      message: 'Walk request created successfully',
+      request_id: result.insertId
+    });
+  } catch (err) {
+    console.error('Error creating walk request:', err);
+    res.status(500).json({ error: 'Server error while creating walk request.' });
   }
 });
+
 
 // POST an application to walk a dog (from walker)
 router.post('/:id/apply', async (req, res) => {
