@@ -106,9 +106,10 @@
 
         onMounted(async () => {
           try {
-            const res = await fetch('/api/users/me'); // Fetch user from server-side session
+            const res = await fetch('/api/users/me'); // fetch user from server-side session
             if (!res.ok) throw new Error('Not logged in');
             const currentUser = await res.json();
+            
 
             if (currentUser.role !== 'owner') {
               alert('Not logged in as owner');
