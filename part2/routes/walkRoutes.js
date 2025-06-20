@@ -21,6 +21,10 @@ router.get('/', async (req, res) => {
 
 // POST a new walk request (from owner)
 router.post('/', async (req, res) => {
+  if (!req.session.user || req.session.user.role !== 'owner') {
+    return res.status(401).json({ error: 'Not logged in as owner' });
+  }
+
   const { dog_id, requested_time, duration_minutes, location } = req.body;
 
   try {
