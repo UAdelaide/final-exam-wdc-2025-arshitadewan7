@@ -52,7 +52,7 @@ router.post('/login', async (req, res) => {
 
     res.json({ message: 'Login successful', user: rows[0] });
   } catch (error) {
-    console.error("Login failed:", error);
+    console.error("Login failed:", error); // added console logs to debug
     res.status(500).json({ error: 'Login failed' });
   }
 });
