@@ -27,7 +27,7 @@
               <strong>Location:</strong> {{ walk.location }}<br>
               <strong>Owner:</strong> {{ walk.owner_name }}
             </p>
-            <button type=button class="btn btn-outline-success" @click="applyToWalk(walk.request_id)">Apply</button>
+            <button type="button" class="btn btn-outline-success" @click="applyToWalk(walk.request_id)">Apply</button>
           </div>
         </div>
       </div>
@@ -43,7 +43,7 @@
         const walks = ref([]);
         const message = ref('');
         const error = ref('');
-        const user = 3;
+        const user = JSON.parse(localStorage.getItem('user'));
 
         async function loadWalkRequests() {
           try {
@@ -60,7 +60,7 @@
             const res = await fetch(`/api/walks/${requestId}/apply`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ walker_id: user })
+              body: JSON.stringify({ walker_id: user.user_id })
             });
             const result = await res.json();
 
@@ -75,6 +75,11 @@
         }
 
         onMounted(() => {
+          if (!user || user.role !== 'walker') {
+            alert('Not logged in as walker');
+            window.location.href = 'index.html';
+            return;
+          }
           loadWalkRequests();
         });
 
