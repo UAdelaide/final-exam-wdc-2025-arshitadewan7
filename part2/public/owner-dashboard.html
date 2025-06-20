@@ -93,6 +93,8 @@
             });
             const result = await res.json();
             if (!res.ok) throw new Error(result.error || 'Error submitting');
+
+            // updated this section to clear error and show success message
             message.value = result.message;
             form.value = { dog_id: '', requested_time: '', duration_minutes: '', location: '' }; // reset form fields after successful submission
             loadWalks();
