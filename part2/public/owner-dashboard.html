@@ -40,17 +40,9 @@
       </div>
       <div class="card-body">
         <form @submit.prevent="submitWalkRequest">
-          <!--added dropdown instead of numeric id for selection of dogs-->
           <div class="mb-3">
-      <label class="form-label">Select Your Dog</label>
-      <select v-model="form.dog_id" class="form-select" required>
-        <option value="" disabled selected>-- Choose a dog --</option>
-        <option v-for="dog in dogs" :value="dog.dog_id">
-          {{ dog.name }} ({{ dog.size }})
-        </option>
-      </select>
-    </div>
-
+            <label class="form-label">Dog ID</label>
+            <input v-model="form.dog_id" type="number" class="form-control" required>
           </div>
           <div class="mb-3">
             <label class="form-label">Requested Date & Time</label>
