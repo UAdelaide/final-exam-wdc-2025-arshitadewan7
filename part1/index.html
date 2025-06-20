@@ -35,6 +35,10 @@
       50% { transform: translateY(-20px); }
     }
 
+    .hidden-dog {
+      display: none;
+    }
+
     marquee {
       font-size: 60px;
       color: lime;
@@ -46,21 +50,19 @@
       text-decoration: underline dotted red;
       font-style: italic;
     }
-
-    .hidden-dog {
-      display: none;
-    }
   </style>
 </head>
 <body>
   <div id="app">
     <marquee direction="right" scrollamount="20">WELCOME TO THE DOG WALKING WALK DOG SERVICE EXPERIENCE PORTAL</marquee>
 
-    <p>Click the BLACK button that blends into the background to maybe load a dog picture.</p>
-    <button @click="fetchDog">DOG!!!</button>
+    <div style="margin-top: 50px;">
+      <p>Click the BLACK button that blends into the background to maybe load a dog picture.</p>
+      <button @click="fetchDog">DOG!!!</button>
+    </div>
 
-    <div v-if="dogImage" class="hidden-dog" style="display: block;">
-      <h2 style="font-size: 72px;">Today's dog: cutiepatootie</h2>
+    <div v-if="dogImage" class="hidden-dog">
+      <h2 style="font-size: 72px;">Today's dog (distinguished gentleman) : cutiepatootie senior </h2>
       <img :src="dogImage" style="width:800px;">
       <p><a href="https://en.wikipedia.org/wiki/Dog" target="_blank">click for dog lore</a></p>
     </div>
