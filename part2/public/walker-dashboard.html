@@ -43,7 +43,7 @@
         const walks = ref([]);
         const message = ref('');
         const error = ref('');
-        const user = JSON.parse(localStorage.getItem('user'));
+        const user = JSON.parse(localStorage.getItem('user')); // replaces hardcoded walker_id = 3
 
         async function loadWalkRequests() {
           try {
