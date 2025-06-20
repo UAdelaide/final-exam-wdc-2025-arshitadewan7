@@ -1,103 +1,91 @@
 <!DOCTYPE html>
-<html lang="xx-pirate">
+<html lang="zxx">
 <head>
   <meta charset="UTF-8">
-  <title>🐶DOG WALKING™ EXTREME ULTRA MAX 5000</title>
+  <title>🌀DOG APP: THE FINAL FRONTIER🌀</title>
   <script src="https://unpkg.com/vue@3"></script>
   <style>
-    body {
-      background-image: url('https://media.tenor.com/VzVnWZVA6N8AAAAC/confetti-rainbow.gif');
-      background-size: cover;
-      font-family: "Papyrus", "Wingdings", cursive;
-      color: #ff00ff;
-      text-align: center;
-      cursor: progress;
+    html, body {
+      margin: 0;
+      padding: 0;
       overflow: hidden;
+      font-family: "Papyrus", "Impact", "Comic Sans MS", fantasy;
+      background: url('https://media.tenor.com/W9U1hk_yjRgAAAAd/colors-rainbow.gif');
+      background-size: cover;
+      color: #ff66ff;
+      animation: spinText 3s linear infinite;
     }
 
-    .warning {
-      font-size: 72px;
-      color: red;
-      background-color: yellow;
-      transform: rotate(-15deg);
-      animation: shake 0.1s infinite;
+    @keyframes spinText {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.5); }
+      100% { transform: rotate(360deg) scale(1); }
     }
 
-    @keyframes shake {
-      0% { transform: rotate(-15deg); }
-      50% { transform: rotate(15deg); }
-      100% { transform: rotate(-15deg); }
+    h1 {
+      font-size: 100px;
+      animation: rainbow 0.2s infinite alternate;
     }
 
-    button {
-      font-size: 42px;
-      padding: 50px;
-      margin-top: 100px;
-      background: linear-gradient(to right, purple, cyan);
-      color: yellow;
-      border: 10px dashed lime;
-      text-transform: uppercase;
-      transform: scale(1.5);
-      box-shadow: 10px 10px 30px orange;
-      animation: flash 0.5s infinite;
+    @keyframes rainbow {
+      from { color: red; }
+      to { color: lime; }
     }
 
-    @keyframes flash {
-      0% { opacity: 1; }
-      50% { opacity: 0; }
-      100% { opacity: 1; }
+    .secret-button {
+      background: repeating-linear-gradient(45deg, black, black 10px, white 10px, white 20px);
+      color: transparent;
+      font-size: 50px;
+      border: 20px ridge hotpink;
+      padding: 50px 80px;
+      margin-top: 200px;
+      animation: bounce 0.3s infinite;
     }
 
-    #doggo-section {
-      display: none;
-      font-size: 28px;
-      background: rgba(0,0,0,0.6);
-      padding: 40px;
-      margin: 60px auto;
-      width: 90vw;
-      border: 20px double hotpink;
-      color: white;
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-50px); }
     }
 
     img {
-      width: 600px;
-      border-radius: 50%;
-      filter: hue-rotate(270deg) saturate(400%);
+      border: 10px double gold;
+      filter: grayscale(100%) invert(100%) blur(2px) hue-rotate(270deg);
+      width: 700px;
+      height: auto;
     }
 
-    a {
-      color: chartreuse;
-      font-size: 24px;
-      font-weight: bolder;
-      text-decoration: wavy underline pink;
+    .invisible-text {
+      font-size: 5px;
+      color: transparent;
+      user-select: none;
     }
 
-    .tooltip {
+    .nuke {
       position: absolute;
-      top: -500px;
+      top: -9999px;
       left: -9999px;
+      width: 1px;
+      height: 1px;
     }
   </style>
 </head>
 <body>
   <div id="app">
-    <div class="warning">⚠️ DO NOT PRESS THE BUTTON ⚠️</div>
+    <h1>✨🐾 WELCOME TO DOG UNIVERSE 🐾✨</h1>
 
-    <p style="font-size: 24px;">(unless you want to see the most legendary dog ever)</p>
+    <p class="invisible-text">This text is just here to mess with screen readers and SEO bots.</p>
 
-    <button @click="fetchDog">UNLEASH THE BEAST</button>
+    <button class="secret-button" @click="summonDog">
+      DO NOT CLICK
+    </button>
 
-    <div id="doggo-section" v-if="dogImage">
-      <h2>DOG OF THE ETERNITY: BARKULES</h2>
-      <img :src="dogImage">
-      <p>This dog once walked a human. Twice.</p>
-      <p><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">Click here to learn the secret of the leash 🐾</a></p>
-      <p class="tooltip">Totally hidden tooltip text just to annoy screen readers 😈</p>
+    <div v-if="dogImage" class="dog-portal" style="margin-top: 50px;">
+      <p style="font-size: 60px;">🐶 DOGE OF DESTINY 🐶</p>
+      <img :src="dogImage" />
+      <p style="font-size: 30px;">Click here to unleash more dogs → <a href="https://pointerpointer.com" target="_blank">🚪</a></p>
     </div>
 
-    <marquee direction="right" scrollamount="50">
-      🐕🐕🐕 DOGS! DOGS! DOGS! DOGS! DOGS! DOGS! DOGS! 🐕🐕🐕
-    </marquee>
+    <div class="nuke">NVDA BREAKER ENABLED</div>
   </div>
 
   <script>
@@ -110,12 +98,11 @@
         };
       },
       methods: {
-        async fetchDog() {
+        async summonDog() {
+          alert("Initiating dog sequence... ☠️");
           const res = await fetch('https://dog.ceo/api/breeds/image/random');
           const data = await res.json();
           this.dogImage = data.message;
-          document.getElementById('doggo-section').style.display = 'block';
-          alert('The dog has been summoned. Proceed at your own risk.');
         }
       }
     }).mount('#app');
