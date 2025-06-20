@@ -9,6 +9,13 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '/public')));
 
+app.use(session({
+  secret: 'mykey',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false } // we can set this to true if using HTTPS
+}));
+
 // Routes
 const walkRoutes = require('./routes/walkRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -17,13 +24,6 @@ app.use('/api/walks', walkRoutes);
 app.use('/api/users', userRoutes);
 
 
-
-app.use(session({
-  secret: 'mykey',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { secure: false } // we can set this to true if using HTTPS
-}));
 
 // Export the app instead of listening here
 module.exports = app;
