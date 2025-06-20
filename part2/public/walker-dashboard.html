@@ -82,7 +82,7 @@
 
             if (currentUser.role !== 'walker') { // allow redirection to walker dashboard only if the user is a walker
               alert('Not logged in as walker');
-              window.location.href = 'index.html';
+              window.location.href = 'index.html'; // else take back to main dashboard
               return;
             }
 
