@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dog Walk Portal</title>
+  <script src="https://unpkg.com/vue@3"></script>
+  <style>
+    body {
+      background: limegreen;
+      font-family: Comic Sans MS;
+      color: yellow;
+      text-align: center;
+    }
+
+    .button {
+      padding: 20px;
+      margin: 50px;
+      background: red;
+      color: white;
+      border: none;
+      font-size: 24px;
+    }
+
+    #dog-info {
+      display: none;
+    }
+
+    .big-text {
+      font-size: 48px;
+      animation: blink 0.5s infinite;
+    }
+
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1 class="big-text">WELCOME TO DOGGY WORLD - YOUR DOG WALKING EXPERIENCE STARTS HERE</h1>
+
+    <p>Click the hidden button below to unlock today's dog!</p>
+
+    <!-- Poor button placement (kinematic load), and not keyboard accessible -->
+    <button class="button" @click="fetchDog" style="opacity:0.1;">Unlock Dog</button>
+
+    <div id="dog-info" v-if="dogImage">
+      <h2>Dog of the Day: Sparky (Breed: Unknown)</h2>
+      <img :src="dogImage" width="400">
+      <p>This dog is the best. You should definitely walk it.</p>
+      <p><a href="#">Click here for more info about all our other dogs that don't exist yet.</a></p>
+    </div>
+
+    <p style="font-size: 20px;">
+      Here is a full paragraph of instructions even though the site only has one button. Please read everything carefully before continuing.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet, massa vitae consectetur cursus, sapien nisi ultrices nunc, nec hendrerit sapien lacus nec odio.
+    </p>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          dogImage: ''
+        };
+      },
+      methods: {
+        async fetchDog() {
+          const res = await fetch('https://dog.ceo/api/breeds/image/random');
+          const data = await res.json();
+          this.dogImage = data.message;
+          document.getElementById('dog-info').style.display = 'block';
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
