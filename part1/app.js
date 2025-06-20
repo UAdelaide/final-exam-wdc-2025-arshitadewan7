@@ -103,6 +103,11 @@ let db;
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/', (req, res) => {
+  res.send('🐾 DogWalkService API is running! Try /api/dogs');
+});
+
+
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
