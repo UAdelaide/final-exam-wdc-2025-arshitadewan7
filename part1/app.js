@@ -30,7 +30,7 @@ let db;
       database: 'DogWalkService'
     });
 
-  
+
     await db.execute(`
       CREATE TABLE IF NOT EXISTS Users (
         user_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -94,7 +94,7 @@ let db;
       )
     `);
 
-    // Step 5: Insert test data if Users is empty
+
     const [users] = await db.execute('SELECT COUNT(*) AS count FROM Users');
     if (users[0].count === 0) {
       await db.execute(`
@@ -120,7 +120,7 @@ let db;
       `);
     }
 
-    // 🐶 Route: /api/dogs
+    // Route: /api/dogs
     app.get('/api/dogs', async (req, res) => {
       try {
         const [rows] = await db.query(`
@@ -134,7 +134,7 @@ let db;
       }
     });
 
-    // 🐾 Route: /api/walkrequests/open
+    // Route: /api/walkrequests/open
     app.get('/api/walkrequests/open', async (req, res) => {
       try {
         const [rows] = await db.query(`
