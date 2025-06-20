@@ -49,7 +49,7 @@
               return;
             }
             localStorage.setItem('user', JSON.stringify(result.user));
-            window.location.href = result.user.role === 'owner' ? 'owner.html' : 'walker.html';
+            window.location.href = result.user.role === 'owner' ? 'owner-dashboard.html' : 'walker-dashboard.html';
           } catch (err) {
             this.error = 'Login error';
           }
