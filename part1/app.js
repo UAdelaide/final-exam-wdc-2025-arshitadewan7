@@ -13,14 +13,14 @@ app.use('/api/dogs', dogsRoute);
 app.use('/api/walkrequests/open', walkrequestsRoute);
 app.use('/api/walkers/summary', walkersRoute);
 
-// Insert initial data on startup (simplified for demo)
+
 app.listen(port, async () => {
   console.log(`Server running at http://localhost:${port}`);
 
   try {
     const conn = await pool.getConnection();
 
-    // Optional: clean insert block
+
     await conn.query(`DELETE FROM WalkRatings; DELETE FROM WalkApplications; DELETE FROM WalkRequests; DELETE FROM Dogs; DELETE FROM Users;`);
 
     await conn.query(`
