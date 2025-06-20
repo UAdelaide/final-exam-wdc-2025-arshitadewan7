@@ -1,62 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Dog Walk Portal</title>
+  <title>WELCOME TO THE DOG WALKING WALK DOG SERVICE EXPERIENCE PORTAL</title>
   <script src="https://unpkg.com/vue@3"></script>
   <style>
     body {
-      background: limegreen;
-      font-family: Comic Sans MS;
-      color: yellow;
+      background: linear-gradient(45deg, red, yellow, lime, cyan, blue, magenta);
+      font-family: Papyrus, Comic Sans MS, cursive;
+      font-size: 32px;
+      color: hotpink;
       text-align: center;
+      cursor: wait;
+      animation: spinbg 2s linear infinite;
     }
 
-    .button {
-      padding: 20px;
-      margin: 50px;
-      background: red;
-      color: white;
-      border: none;
-      font-size: 24px;
+    @keyframes spinbg {
+      0% { background-position: 0 0; }
+      100% { background-position: 1000px 0; }
     }
 
-    #dog-info {
+    button {
+      background-color: #000;
+      color: #000;
+      font-size: 40px;
+      padding: 40px;
+      margin-top: 300px;
+      border-radius: 0;
+      border: 10px dotted yellow;
+      animation: bounce 0.2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .hidden-dog {
       display: none;
     }
 
-    .big-text {
-      font-size: 48px;
-      animation: blink 0.5s infinite;
+    marquee {
+      font-size: 60px;
+      color: lime;
+      background-color: fuchsia;
     }
 
-    @keyframes blink {
-      0% { opacity: 1; }
-      50% { opacity: 0; }
-      100% { opacity: 1; }
+    a {
+      color: chartreuse;
+      text-decoration: underline dotted red;
+      font-style: italic;
     }
   </style>
 </head>
 <body>
   <div id="app">
-    <h1 class="big-text">WELCOME TO DOGGY WORLD - YOUR DOG WALKING EXPERIENCE STARTS HERE</h1>
+    <marquee direction="right" scrollamount="20">WELCOME TO THE DOG WALKING WALK DOG SERVICE EXPERIENCE PORTAL</marquee>
 
-    <p>Click the hidden button below to unlock today's dog!</p>
-
-    <!-- Poor button placement (kinematic load), and not keyboard accessible -->
-    <button class="button" @click="fetchDog" style="opacity:0.1;">Unlock Dog</button>
-
-    <div id="dog-info" v-if="dogImage">
-      <h2>Dog of the Day: Sparky (Breed: Unknown)</h2>
-      <img :src="dogImage" width="400">
-      <p>This dog is the best. You should definitely walk it.</p>
-      <p><a href="#">Click here for more info about all our other dogs that don't exist yet.</a></p>
+    <div style="margin-top: 50px;">
+      <p>Click the BLACK button that blends into the background to maybe load a dog picture.</p>
+      <button @click="fetchDog">DOG!!!</button>
     </div>
 
-    <p style="font-size: 20px;">
-      Here is a full paragraph of instructions even though the site only has one button. Please read everything carefully before continuing.
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet, massa vitae consectetur cursus, sapien nisi ultrices nunc, nec hendrerit sapien lacus nec odio.
-    </p>
+    <div v-if="dogImage" class="hidden-dog">
+      <h2 style="font-size: 72px;">Today's dog: 🐕‍🦺</h2>
+      <img :src="dogImage" style="width:800px;">
+      <p><a href="https://en.wikipedia.org/wiki/Dog" target="_blank">click for dog lore</a></p>
+    </div>
+
+    <ul>
+      <li>Don't forget to check the dog if you clicked it already.</li>
+      <li>Maybe reload the page. Or don't. IDK.</li>
+      <li>Scroll up and down a few times just in case.</li>
+      <li>There might be sounds. Or not.</li>
+    </ul>
+
+    <p style="color: transparent;">This text is here but not readable. Nice!</p>
   </div>
 
   <script>
@@ -73,7 +91,7 @@
           const res = await fetch('https://dog.ceo/api/breeds/image/random');
           const data = await res.json();
           this.dogImage = data.message;
-          document.getElementById('dog-info').style.display = 'block';
+          document.querySelector('.hidden-dog').style.display = 'block';
         }
       }
     }).mount('#app');
