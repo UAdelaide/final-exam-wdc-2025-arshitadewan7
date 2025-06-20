@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
 
   // Validation: Are all required fields provided?
   if (!dog_id || !requested_time || !duration_minutes || !location) {
-    console.log('❌ Missing one or more required fields');
+    console.log('Missing one or more required fields');
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
