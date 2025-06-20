@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
   const user = req.session.user;
 
   if (!user || user.role !== 'owner') {
-    return res.status(403).json({ error: 'Only logged-in owners can create walk requests.' });
+    return res.status(403).json({ error: 'Only logged-in owners can create walk requests.' }); // added logic to check user roles
   }
 
   if (!dog_id || !requested_time || !duration_minutes || !location) {
