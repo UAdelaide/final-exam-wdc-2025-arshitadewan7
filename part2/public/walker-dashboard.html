@@ -74,7 +74,7 @@
           }
         }
 
-        onMounted(async () => { // modified onMounted to serve session logic
+        onMounted(async () => { // modified onMounted to serve session logic and handle logged in users 
           try {
             const res = await fetch('/api/users/me');
             if (!res.ok) throw new Error('Not logged in');
