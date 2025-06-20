@@ -11,10 +11,11 @@ app.use(express.static(path.join(__dirname, '/public')));
 // Routes
 const walkRoutes = require('./routes/walkRoutes');
 const userRoutes = require('./routes/userRoutes');
-const session = require('express-session'); // added for express session
 
 app.use('/api/walks', walkRoutes);
 app.use('/api/users', userRoutes);
+
+const session = require('express-session'); // added for express session
 
 app.use(session({
   secret: 'mykey',
