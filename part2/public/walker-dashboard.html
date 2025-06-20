@@ -75,7 +75,7 @@
         }
 
         onMounted(() => {
-          if (!user || user.role !== 'walker') {
+          if (!user || user.role !== 'walker') { // redirects if not logged in or not a walker
             alert('Not logged in as walker');
             window.location.href = 'index.html';
             return;
