@@ -97,6 +97,8 @@
             // updated this section to clear error and show success message
             message.value = result.message;
             form.value = { dog_id: '', requested_time: '', duration_minutes: '', location: '' }; // reset form fields after successful submission
+
+            // refresh the list
             loadWalks();
           } catch (err) {
             error.value = err.message;
