@@ -105,7 +105,7 @@
 
         onMounted(async () => {
           try {
-            const res = await fetch('/api/users/me');
+            const res = await fetch('/api/users/me'); // added session based fetch
             if (!res.ok) throw new Error('Not logged in');
             const currentUser = await res.json();
 
