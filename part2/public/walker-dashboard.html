@@ -60,7 +60,7 @@
             const res = await fetch(`/api/walks/${requestId}/apply`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ walker_id: user.user_id })
+              body: JSON.stringify({ walker_id: user.user_id }) // uses logged-in user's ID instead of hardcoding
             });
             const result = await res.json();
 
