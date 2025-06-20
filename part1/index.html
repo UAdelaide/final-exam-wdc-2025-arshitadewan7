@@ -3,17 +3,65 @@
 <head>
   <title>WELCOME TO THE DOG WALKING WALK DOG SERVICE EXPERIENCE PORTAL</title>
   <script src="https://unpkg.com/vue@3"></script>
+  <style>
+    body {
+      background: linear-gradient(45deg, red, yellow, lime, cyan, blue, magenta);
+      font-family: Papyrus, Comic Sans MS, cursive;
+      font-size: 32px;
+      color: hotpink;
+      text-align: center;
+      cursor: wait;
+      animation: spinbg 2s linear infinite;
+    }
+
+    @keyframes spinbg {
+      0% { background-position: 0 0; }
+      100% { background-position: 1000px 0; }
+    }
+
+    button {
+      background-color: #000;
+      color: #000;
+      font-size: 40px;
+      padding: 40px;
+      margin-top: 300px;
+      border-radius: 0;
+      border: 10px dotted yellow;
+      animation: bounce 0.2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    marquee {
+      font-size: 60px;
+      color: lime;
+      background-color: fuchsia;
+    }
+
+    a {
+      color: chartreuse;
+      text-decoration: underline dotted red;
+      font-style: italic;
+    }
+
+    .hidden-dog {
+      display: none;
+    }
+  </style>
 </head>
 <body>
   <div id="app">
-    <h1>Welcome to the Dog App</h1>
+    <marquee direction="right" scrollamount="20">WELCOME TO THE DOG WALKING WALK DOG SERVICE EXPERIENCE PORTAL</marquee>
 
     <p>Click the BLACK button that blends into the background to maybe load a dog picture.</p>
     <button @click="fetchDog">DOG!!!</button>
 
-    <div v-if="dogImage">
-      <h2>Today's dog: cutiepatootie</h2>
-      <img :src="dogImage" width="600">
+    <div v-if="dogImage" class="hidden-dog" style="display: block;">
+      <h2 style="font-size: 72px;">Today's dog: cutiepatootie</h2>
+      <img :src="dogImage" style="width:800px;">
       <p><a href="https://en.wikipedia.org/wiki/Dog" target="_blank">click for dog lore</a></p>
     </div>
 
@@ -23,6 +71,8 @@
       <li>Scroll up and down a few times just in case.</li>
       <li>There might be sounds. Or not.</li>
     </ul>
+
+    <p style="color: transparent;">This text is here but not readable. Nice!</p>
   </div>
 
   <script>
@@ -39,6 +89,7 @@
           const res = await fetch('https://dog.ceo/api/breeds/image/random');
           const data = await res.json();
           this.dogImage = data.message;
+          document.querySelector('.hidden-dog').style.display = 'block';
         }
       }
     }).mount('#app');
