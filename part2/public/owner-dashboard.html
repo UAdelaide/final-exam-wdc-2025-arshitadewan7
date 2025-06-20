@@ -105,7 +105,7 @@
           }
         }
 
-        onMounted(() => {
+        onMounted(() => { 
           if (!user || user.role !== 'owner') {
             alert('Not logged in as owner');
             window.location.href = 'index.html';
