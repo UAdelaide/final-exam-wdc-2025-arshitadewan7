@@ -23,6 +23,15 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const { dog_id, requested_time, duration_minutes, location } = req.body;
 
+  // Log what the frontend is sending
+  console.log('Received walk request body:', req.body);
+
+  // Validation: Are all required fields provided?
+  if (!dog_id || !requested_time || !duration_minutes || !location) {
+    console.log('❌ Missing one or more required fields');
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
   try {
     const [result] = await db.query(`
       INSERT INTO WalkRequests (dog_id, requested_time, duration_minutes, location)
