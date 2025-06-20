@@ -150,7 +150,7 @@ let db;
       }
     });
 
-    // 👟 Route: /api/walkers/summary
+    // Route: /api/walkers/summary
     app.get('/api/walkers/summary', async (req, res) => {
       try {
         const [rows] = await db.query(`
@@ -176,7 +176,6 @@ let db;
       }
     });
 
-    // ✅ Start the server once DB is ready
     app.listen(PORT, () => {
       console.log(`Server running at http://localhost:${PORT}`);
     });
