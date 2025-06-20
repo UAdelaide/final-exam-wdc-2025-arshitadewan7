@@ -43,7 +43,7 @@
         const walks = ref([]);
         const message = ref('');
         const error = ref('');
-        const user = JSON.parse(localStorage.getItem('user')); // replaces hardcoded walker_id = 3
+        const user = ref(null);
 
         async function loadWalkRequests() {
           try {
@@ -60,7 +60,7 @@
             const res = await fetch(`/api/walks/${requestId}/apply`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ walker_id: user.user_id }) // uses logged-in user's ID instead of hardcoding
+              body: JSON.stringify({ walker_id: user.value.user_id }) // pulled from session
             });
             const result = await res.json();
 
@@ -74,13 +74,24 @@
           }
         }
 
-        onMounted(() => {
-          if (!user || user.role !== 'walker') { // redirects if not logged in or not a walker
-            alert('Not logged in as walker');
+        onMounted(async () => {
+          try {
+            const res = await fetch('/api/users/me');
+            if (!res.ok) throw new Error('Not logged in');
+            const currentUser = await res.json();
+
+            if (currentUser.role !== 'walker') {
+              alert('Not logged in as walker');
+              window.location.href = 'index.html';
+              return;
+            }
+
+            user.value = currentUser;
+            await loadWalkRequests();
+          } catch (err) {
+            alert('Session expired or not logged in');
             window.location.href = 'index.html';
-            return;
           }
-          loadWalkRequests();
         });
 
         return {
