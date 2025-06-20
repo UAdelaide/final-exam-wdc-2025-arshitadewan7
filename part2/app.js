@@ -20,7 +20,7 @@ app.use(session({
   secret: 'mykey',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false }
+  cookie: { secure: false } // we can set this to true if using HTTPS
 }));
 
 // Export the app instead of listening here
