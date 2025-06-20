@@ -74,13 +74,13 @@
           }
         }
 
-        onMounted(async () => { // modified onMounted to serve session logic and handle logged in users 
+        onMounted(async () => { // modified onMounted to serve session logic and handle logged in users
           try {
             const res = await fetch('/api/users/me');
             if (!res.ok) throw new Error('Not logged in');
             const currentUser = await res.json();
 
-            if (currentUser.role !== 'walker') {
+            if (currentUser.role !== 'walker') { // 
               alert('Not logged in as walker');
               window.location.href = 'index.html';
               return;
