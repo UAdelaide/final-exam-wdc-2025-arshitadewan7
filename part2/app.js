@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const session = require('express-session'); // added for express session
-const cookieParser = require('cook')
+const cookieParser = require('cookie-parser'); // added cookie parser
 require('dotenv').config();
 
 const app = express();
