@@ -23,7 +23,7 @@ let db;
     await connection.end();
 
 
-    db = await mysql.createConnection({ // connect with DogWalkService 
+    db = await mysql.createConnection({ // connect with DogWalkService database
       host: '127.0.0.1',
       user: 'root',
       password: '',
@@ -94,7 +94,7 @@ let db;
       )
     `);
 
-
+    // insert vak
     const [users] = await db.execute('SELECT COUNT(*) AS count FROM Users');
     if (users[0].count === 0) {
       await db.execute(`
