@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const db = require('../models/db');
 
-// GET /api/dogs - returns all dogs
+// GET /api/dogs - getting all registered dogs
 router.get('/', async (req, res) => {
   try {
+    // get dogs from db
     const [rows] = await db.query('SELECT * FROM Dogs');
     res.json(rows);
   } catch (error) {
