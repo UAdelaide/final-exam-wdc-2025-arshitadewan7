@@ -23,7 +23,7 @@ let db;
     await connection.end();
 
 
-    db = await mysql.createConnection({
+    db = await mysql.createConnection({ // connect with DogWalkService 
       host: '127.0.0.1',
       user: 'root',
       password: '',
