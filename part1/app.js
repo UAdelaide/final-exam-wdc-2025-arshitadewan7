@@ -13,7 +13,7 @@ let db;
   try {
 
     const connection = await mysql.createConnection({ // creating a sql connection
-      host: '127.0.0.1',
+      host: '127.0.0.1', // using 127.0.0.1 instead of localhost
       user: 'root',
       password: ''
     });
