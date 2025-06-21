@@ -21,12 +21,12 @@ app.use(session({ // added functionality for express session
 // Routes
 const walkRoutes = require('./routes/walkRoutes');
 const userRoutes = require('./routes/userRoutes');
-const dogRoutes = require('./routes/dogRoutes');
+const dogRoutes = require('./routes/dogRoutes'); // added new dog route
 
 // Use routes
 app.use('/api/walks', walkRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/dogs', dogRoutes);
+app.use('/api/dogs', dogRoutes); // use dog route
 
 // Export the app instead of listening here
 module.exports = app;
